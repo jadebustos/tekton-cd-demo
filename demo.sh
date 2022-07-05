@@ -71,13 +71,16 @@ command.install() {
 
   info "Creating namespaces $cicd_prj, $dev_prj, $stage_prj"
   oc get ns $cicd_prj 2>/dev/null  || { 
-    oc new-project $cicd_prj 
+    oc new-project $cicd_prj
+    oc delete limitrange -n $cicd_prj ${cicd_prj}-core-resource-limits
   }
   oc get ns $dev_prj 2>/dev/null  || { 
     oc new-project $dev_prj
+    oc delete limitrange -n $dev_prj ${dev_prj}-core-resource-limits
   }
   oc get ns $stage_prj 2>/dev/null  || { 
     oc new-project $stage_prj 
+    oc delete limitrange -n $stage_prj ${stage_prj}-core-resource-limits
   }
 
   info "Configure service account permissions for pipeline"
