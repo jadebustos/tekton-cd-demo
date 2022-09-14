@@ -98,8 +98,9 @@ command.install() {
 
   oc create -f config/maven-settings-configmap.yaml -n $cicd_prj
   oc apply -f config/pipeline-pvc.yaml -n $cicd_prj
-  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-dev.yaml | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | sed -E "s#spring#quarkus#g" | oc apply -f - -n $cicd_prj
-  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-stage.yaml | sed -E "s/demo-stage/$stage_prj/g" | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | sed -E "s#spring#quarkus#g" | oc apply -f - -n $cicd_prj
+  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-dev.yaml | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | sed -E "s/spring/quarkus/g" | oc apply -f - -n $cicd_prj
+
+  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-stage.yaml | sed -E "s/demo-stage/$stage_prj/g" | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | sed -E "s/spring/quarkus/g" | oc apply -f - -n $cicd_prj
 
   oc apply -f triggers/gogs-triggerbinding.yaml -n $cicd_prj
   oc apply -f triggers/triggertemplate.yaml -n $cicd_prj

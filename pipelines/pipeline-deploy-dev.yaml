@@ -66,7 +66,7 @@ spec:
     - name: GOALS
       value: ["package", "-f", "spring-petclinic"]
     - name: MAVEN_IMAGE
-      value: 'docker.io/maven:3.8.6-openjdk-18-slim'
+      value: 'docker.io/maven:3.8.6-openjdk-11-slim'
 
   - name: code-analysis
     taskRef:
@@ -89,7 +89,7 @@ spec:
       - -Dsonar.userHome=/tmp/sonar
       - -DskipTests=true
     - name: MAVEN_IMAGE
-      value: 'docker.io/maven:3.8.6-openjdk-18-slim'
+      value: 'docker.io/maven:3.8.6-openjdk-11-slim'
 
   - name: dependency-report
     taskRef:
@@ -126,6 +126,8 @@ spec:
       - -DskipTests=true
       - -DaltDeploymentRepository=nexus::default::http://nexus:8081/repository/maven-releases/
       - -DaltSnapshotDeploymentRepository=nexus::default::http://nexus:8081/repository/maven-snapshots/
+    - name: MAVEN_IMAGE
+      value: 'docker.io/maven:3.8.6-openjdk-11-slim'
 
   - name: build-image
     taskRef:

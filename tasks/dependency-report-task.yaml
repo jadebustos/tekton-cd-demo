@@ -123,7 +123,7 @@ spec:
         - -DskipTests=true
       command:
         - /usr/bin/mvn
-      image: gcr.io/cloud-builders/mvn
+      image: docker.io/maven:3.8.6-openjdk-18-slim
       name: mvn-goals
       resources: {}
       workingDir: $(workspaces.source.path)
