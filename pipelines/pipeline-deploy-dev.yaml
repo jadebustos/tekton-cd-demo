@@ -32,6 +32,7 @@ spec:
   - name: workspace
   - name: maven-settings
   tasks:
+
   - name: source-clone
     taskRef:
       name: git-clone
@@ -50,6 +51,7 @@ spec:
       value: spring-petclinic
     - name: deleteExisting
       value: "true"
+
   - name: unit-tests
     taskRef:
       name: maven
@@ -63,6 +65,9 @@ spec:
     params:
     - name: GOALS
       value: ["package", "-f", "spring-petclinic"]
+    - name: MAVEN_IMAGE
+      value: 'docker.io/maven:3.8.6-openjdk-18-slim'
+
   - name: code-analysis
     taskRef:
       name: maven
@@ -83,6 +88,9 @@ spec:
       - -Dsonar.host.url=http://sonarqube:9000
       - -Dsonar.userHome=/tmp/sonar
       - -DskipTests=true
+    - name: MAVEN_IMAGE
+      value: 'docker.io/maven:3.8.6-openjdk-18-slim'
+
   - name: dependency-report
     taskRef:
       name: dependency-report
@@ -96,6 +104,7 @@ spec:
     params:
     - name: SOURCE_DIR
       value: spring-petclinic
+
   - name: release-app
     taskRef:
       name: maven
@@ -117,6 +126,7 @@ spec:
       - -DskipTests=true
       - -DaltDeploymentRepository=nexus::default::http://nexus:8081/repository/maven-releases/
       - -DaltSnapshotDeploymentRepository=nexus::default::http://nexus:8081/repository/maven-snapshots/
+
   - name: build-image
     taskRef:
       name: s2i-java-11
@@ -136,6 +146,7 @@ spec:
     workspaces:
     - name: source
       workspace: workspace
+
   - name: config-clone
     taskRef:
       name: git-clone
@@ -152,6 +163,7 @@ spec:
       value: spring-petclinic-config
     - name: deleteExisting
       value: "true"
+
   - name: tests-clone
     taskRef:
       name: git-clone
@@ -168,6 +180,7 @@ spec:
       value: spring-petclinic-gatling
     - name: deleteExisting
       value: "true"
+
   - name: deploy-dev
     taskRef:
       name: deploy-app
@@ -193,6 +206,7 @@ spec:
     - name: source
       workspace: workspace
       subPath: spring-petclinic-config
+
   - name: int-test
     taskRef:
       name: openshift-client
@@ -203,6 +217,7 @@ spec:
     - name: SCRIPT
       value: |
           sleep $(($RANDOM % 40 + 20))
+
   - name: perf-test
     taskRef:
       name: gatling

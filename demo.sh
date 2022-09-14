@@ -94,11 +94,13 @@ command.install() {
 
   info "Deploying pipeline and tasks to $cicd_prj namespace"
   oc apply -f tasks -n $cicd_prj
+  sed -E "s#quay.io/siamaksade/spring#quarkus#g" tasks/deploy-app-task.yaml | oc apply -f - -n $cicd_prj
+
   oc create -f config/maven-settings-configmap.yaml -n $cicd_prj
   oc apply -f config/pipeline-pvc.yaml -n $cicd_prj
-  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-dev.yaml | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | oc apply -f - -n $cicd_prj
-  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-stage.yaml | sed -E "s/demo-stage/$stage_prj/g" | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | oc apply -f - -n $cicd_prj
-  
+  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-dev.yaml | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | sed -E "s#spring#quarkus#g" | oc apply -f - -n $cicd_prj
+  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-stage.yaml | sed -E "s/demo-stage/$stage_prj/g" | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | sed -E "s#spring#quarkus#g" | oc apply -f - -n $cicd_prj
+
   oc apply -f triggers/gogs-triggerbinding.yaml -n $cicd_prj
   oc apply -f triggers/triggertemplate.yaml -n $cicd_prj
   sed "s/demo-dev/$dev_prj/g" triggers/eventlistener.yaml | oc apply -f - -n $cicd_prj
@@ -106,9 +108,18 @@ command.install() {
   info "Initiatlizing git repository in Gogs and configuring webhooks"
   sed "s/@HOSTNAME/$GOGS_HOSTNAME/g" config/gogs-configmap.yaml | oc create -f - -n $cicd_prj
   oc rollout status deployment/gogs -n $cicd_prj
-  oc create -f config/gogs-init-taskrun.yaml -n $cicd_prj
+
+  sed "s#https://github.com/siamaksade/spring#https://github.com/redhat-developer-demos/quarkus#g" config/gogs-init-taskrun.yaml | sed "s/spring/quarkus/g" | oc create -f - -n $cicd_prj
 
   oc project $cicd_prj
+
+  rm -rf quarkus-petclinic
+  # TODO fix sometimes can clone an empty repo
+  until git clone "http://$GOGS_HOSTNAME/gogs/quarkus-petclinic.git"; do sleep 10; done
+  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql.yml
+  oc wait --for=condition=available --timeout=60s deployment/postgresql
+  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql-db-creator.yml
+  rm -rf quarkus-petclinic
 
   cat <<-EOF
 
