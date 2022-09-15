@@ -72,12 +72,15 @@ command.install() {
   info "Creating namespaces $cicd_prj, $dev_prj, $stage_prj"
   oc get ns $cicd_prj 2>/dev/null  || { 
     oc new-project $cicd_prj
+    oc delete limitrange -n $cicd_prj ${cicd_prj}-core-resource-limits
   }
   oc get ns $dev_prj 2>/dev/null  || { 
     oc new-project $dev_prj
+    oc delete limitrange -n $dev_prj ${dev_prj}-core-resource-limits
   }
   oc get ns $stage_prj 2>/dev/null  || { 
     oc new-project $stage_prj 
+    oc delete limitrange -n $stage_prj ${stage_prj}-core-resource-limits
   }
 
   info "Configure service account permissions for pipeline"
@@ -91,10 +94,13 @@ command.install() {
 
   info "Deploying pipeline and tasks to $cicd_prj namespace"
   oc apply -f tasks -n $cicd_prj
+  sed -E "s#quay.io/siamaksade/spring#quarkus#g" tasks/deploy-app-task.yaml | oc apply -f - -n $cicd_prj
+
   oc create -f config/maven-settings-configmap.yaml -n $cicd_prj
   oc apply -f config/pipeline-pvc.yaml -n $cicd_prj
-  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-dev.yaml | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | oc apply -f - -n $cicd_prj
-  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-stage.yaml | sed -E "s/demo-stage/$stage_prj/g" | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | oc apply -f - -n $cicd_prj
+  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-dev.yaml | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | sed -E "s/spring/quarkus/g" | oc apply -f - -n $cicd_prj
+
+  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-stage.yaml | sed -E "s/demo-stage/$stage_prj/g" | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | sed -E "s/spring/quarkus/g" | oc apply -f - -n $cicd_prj
 
   oc apply -f triggers/gogs-triggerbinding.yaml -n $cicd_prj
   oc apply -f triggers/triggertemplate.yaml -n $cicd_prj
@@ -103,9 +109,29 @@ command.install() {
   info "Initiatlizing git repository in Gogs and configuring webhooks"
   sed "s/@HOSTNAME/$GOGS_HOSTNAME/g" config/gogs-configmap.yaml | oc create -f - -n $cicd_prj
   oc rollout status deployment/gogs -n $cicd_prj
-  oc create -f config/gogs-init-taskrun.yaml -n $cicd_prj
+
+  # TODO replace log messages
+  sed 's#"https://github.com/siamaksade/spring-petclinic"#"https://github.com/redhat-developer-demos/quarkus-petclinic"#' config/gogs-init-taskrun.yaml \
+  | sed 's#spring-petclinic/hooks#quarkus-petclinic/hooks#' \
+  | sed 's#spring-petclinic-config/hooks#quarkus-petclinic-config/hooks#' \
+  | sed 's#\(.*data_repo.*quarkus-petclinic.*repo_name.*\)spring-petclinic\(.*\)#\1quarkus-petclinic\2#' \
+  | sed 's#\(.*data_repo.*spring-petclinic-config.*repo_name.*\)spring-petclinic-config\(.*\)#\1quarkus-petclinic-config\2#' \
+  | sed 's#\(.*data_repo.*spring-petclinic-gatling.*repo_name.*\)spring-petclinic-gatling\(.*\)#\1quarkus-petclinic-gatling\2#' \
+  | oc create -f - -n $cicd_prj
 
   oc project $cicd_prj
+
+  rm -rf quarkus-petclinic
+  # TODO fix sometimes can clone an empty repo
+  until git clone "http://$GOGS_HOSTNAME/gogs/quarkus-petclinic.git"; do sleep 10; done
+  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql.yml
+  oc wait --for=condition=available --timeout=60s deployment/postgresql
+  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql-db-creator.yml
+  rm -rf quarkus-petclinic
+
+  # TODO rework config and gatling repos
+  git clone "http://$GOGS_HOSTNAME/gogs/quarkus-petclinic-config.git"
+  
 
   cat <<-EOF
 
