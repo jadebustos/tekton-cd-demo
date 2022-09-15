@@ -129,9 +129,16 @@ command.install() {
   oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql-db-creator.yml
   rm -rf quarkus-petclinic
 
-  # TODO rework config and gatling repos
+  # TODO rework this
   git clone "http://$GOGS_HOSTNAME/gogs/quarkus-petclinic-config.git"
-  
+  find quarkus-petclinic-config \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i 's/spring/quarkus/g'
+  # git --git-dir quarkus-petclinic-config/.git status
+  pushd .
+  cd quarkus-petclinic-config
+  git add --all
+  git -c user.name='demo' -c user.email='demo@example.com' commit -m "to quarkus"
+  git push "http://gogs:gogs@$GOGS_HOSTNAME/gogs/quarkus-petclinic-config.git"
+  popd
 
   cat <<-EOF
 
