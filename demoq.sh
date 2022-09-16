@@ -72,15 +72,15 @@ command.install() {
   info "Creating namespaces $cicd_prj, $dev_prj, $stage_prj"
   oc get ns $cicd_prj 2>/dev/null  || { 
     oc new-project $cicd_prj
-    oc delete limitrange -n $cicd_prj ${cicd_prj}-core-resource-limits
+    oc delete limitrange -n $cicd_prj ${cicd_prj}-core-resource-limits || true
   }
   oc get ns $dev_prj 2>/dev/null  || { 
     oc new-project $dev_prj
-    oc delete limitrange -n $dev_prj ${dev_prj}-core-resource-limits
+    oc delete limitrange -n $dev_prj ${dev_prj}-core-resource-limits || true
   }
   oc get ns $stage_prj 2>/dev/null  || { 
     oc new-project $stage_prj 
-    oc delete limitrange -n $stage_prj ${stage_prj}-core-resource-limits
+    oc delete limitrange -n $stage_prj ${stage_prj}-core-resource-limits || true
   }
 
   info "Configure service account permissions for pipeline"
@@ -94,11 +94,11 @@ command.install() {
 
   info "Deploying pipeline and tasks to $cicd_prj namespace"
   oc apply -f tasks -n $cicd_prj
-  sed -E "s#quay.io/siamaksade/spring#quarkus#g" tasks/deploy-app-task.yaml | oc apply -f - -n $cicd_prj
+  sed -E "s#quay.io/siamaksade/spring#image-registry.openshift-image-registry.svc:5000/quarkus#g" tasks/deploy-app-task.yaml | oc apply -f - -n $cicd_prj
 
   oc create -f config/maven-settings-configmap.yaml -n $cicd_prj
   oc apply -f config/pipeline-pvc.yaml -n $cicd_prj
-  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-dev.yaml | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | sed -E "s/spring/quarkus/g" | oc apply -f - -n $cicd_prj
+  sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-dev.yaml | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | sed -E "s/spring/quarkus/g"| sed "s#quay.io/siamaksade#image-registry.openshift-image-registry.svc:5000#" | oc apply -f - -n $cicd_prj
 
   sed "s/demo-dev/$dev_prj/g" pipelines/pipeline-deploy-stage.yaml | sed -E "s/demo-stage/$stage_prj/g" | sed -E "s#https://github.com/siamaksade#http://$GOGS_HOSTNAME/gogs#g" | sed -E "s/spring/quarkus/g" | oc apply -f - -n $cicd_prj
 
@@ -117,21 +117,25 @@ command.install() {
   | sed 's#\(.*data_repo.*quarkus-petclinic.*repo_name.*\)spring-petclinic\(.*\)#\1quarkus-petclinic\2#' \
   | sed 's#\(.*data_repo.*spring-petclinic-config.*repo_name.*\)spring-petclinic-config\(.*\)#\1quarkus-petclinic-config\2#' \
   | sed 's#\(.*data_repo.*spring-petclinic-gatling.*repo_name.*\)spring-petclinic-gatling\(.*\)#\1quarkus-petclinic-gatling\2#' \
+  | sed '/petclinic-config.hooks/,+9 s/^/          #/' \
   | oc create -f - -n $cicd_prj
 
-  oc project $cicd_prj
-
-  rm -rf quarkus-petclinic
   # TODO fix sometimes can clone an empty repo
   until git clone "http://$GOGS_HOSTNAME/gogs/quarkus-petclinic.git"; do sleep 10; done
-  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql.yml
-  oc wait --for=condition=available --timeout=60s deployment/postgresql
-  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql-db-creator.yml
+  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql.yml -n $dev_prj
+  oc wait --for=condition=available --timeout=60s deployment/postgresql -n $dev_prj
+  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql-db-creator.yml -n $dev_prj
+  
+  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql.yml -n $cicd_prj
+  oc wait --for=condition=available --timeout=60s deployment/postgresql -n $cicd_prj
+  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql-db-creator.yml -n $cicd_prj
+  
   rm -rf quarkus-petclinic
 
   # TODO rework this
   git clone "http://$GOGS_HOSTNAME/gogs/quarkus-petclinic-config.git"
   find quarkus-petclinic-config \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i 's/spring/quarkus/g'
+  sed -i 's#quay.io/siamaksade#image-registry.openshift-image-registry.svc:5000#' quarkus-petclinic-config/app/deployment.yaml
   # git --git-dir quarkus-petclinic-config/.git status
   pushd .
   cd quarkus-petclinic-config
