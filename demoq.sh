@@ -115,34 +115,11 @@ command.install() {
   | sed 's#spring-petclinic/hooks#quarkus-petclinic/hooks#' \
   | sed 's#spring-petclinic-config/hooks#quarkus-petclinic-config/hooks#' \
   | sed 's#\(.*data_repo.*quarkus-petclinic.*repo_name.*\)spring-petclinic\(.*\)#\1quarkus-petclinic\2#' \
-  | sed 's#\(.*data_repo.*spring-petclinic-config.*repo_name.*\)spring-petclinic-config\(.*\)#\1quarkus-petclinic-config\2#' \
+  | sed 's#"https://github.com/siamaksade/spring-petclinic-config.git"#"https://github.com/aolle/quarkus-petclinic-config"#' \
+  | sed 's/spring-petclinic-config/quarkus-petclinic-config/' \
   | sed 's#\(.*data_repo.*spring-petclinic-gatling.*repo_name.*\)spring-petclinic-gatling\(.*\)#\1quarkus-petclinic-gatling\2#' \
   | sed '/petclinic-config.hooks/,+9 s/^/          #/' \
   | oc create -f - -n $cicd_prj
-
-  # TODO fix sometimes can clone an empty repo
-  until git clone "http://$GOGS_HOSTNAME/gogs/quarkus-petclinic.git"; do sleep 10; done
-  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql.yml -n $dev_prj
-  oc wait --for=condition=available --timeout=60s deployment/postgresql -n $dev_prj
-  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql-db-creator.yml -n $dev_prj
-  
-  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql.yml -n $cicd_prj
-  oc wait --for=condition=available --timeout=60s deployment/postgresql -n $cicd_prj
-  oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql-db-creator.yml -n $cicd_prj
-  
-  rm -rf quarkus-petclinic
-
-  # TODO rework this
-  git clone "http://$GOGS_HOSTNAME/gogs/quarkus-petclinic-config.git"
-  find quarkus-petclinic-config \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i 's/spring/quarkus/g'
-  sed -i 's#quay.io/siamaksade#image-registry.openshift-image-registry.svc:5000#' quarkus-petclinic-config/app/deployment.yaml
-  # git --git-dir quarkus-petclinic-config/.git status
-  pushd .
-  cd quarkus-petclinic-config
-  git add --all
-  git -c user.name='demo' -c user.email='demo@example.com' commit -m "to quarkus"
-  git push "http://gogs:gogs@$GOGS_HOSTNAME/gogs/quarkus-petclinic-config.git"
-  popd
 
   cat <<-EOF
 
