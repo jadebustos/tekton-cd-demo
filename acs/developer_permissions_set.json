@@ -1,0 +1,33 @@
+{
+
+    "name": "Developer Perms 2",
+    "description": "Developer permissions",
+    "resourceToAccess": 
+
+    {
+        "Administration": "READ_ACCESS",
+        "Alert": "READ_ACCESS",
+        "CVE": "READ_ACCESS",
+        "Cluster": "READ_ACCESS",
+        "Compliance": "READ_ACCESS",
+        "ComplianceRunSchedule": "READ_ACCESS",
+        "ComplianceRuns": "READ_ACCESS",
+        "Config": "READ_ACCESS",
+        "Deployment": "READ_ACCESS",
+        "DeploymentExtension": "READ_ACCESS",
+        "Image": "READ_ACCESS",
+        "Namespace": "READ_ACCESS",
+        "NetworkBaseline": "READ_ACCESS",
+        "NetworkGraph": "READ_ACCESS",
+        "NetworkGraphConfig": "READ_ACCESS",
+        "NetworkPolicy": "READ_ACCESS",
+        "Node": "READ_ACCESS",
+        "Policy": "READ_ACCESS",
+        "ProcessWhitelist": "READ_ACCESS",
+        "Risk": "READ_ACCESS",
+        "Secret": "READ_ACCESS",
+        "VulnerabilityManagementApprovals": "READ_ACCESS",
+        "VulnerabilityManagementRequests": "READ_WRITE_ACCESS"
+    }
+
+}

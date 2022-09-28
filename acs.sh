@@ -4,7 +4,7 @@
 
 # ACS
 PROJECT=acs
-declare -r ADMPASSWD=redhat
+declare -r ADMPASSWD=r3dh4t1!
 BUNDLE_NAME=rhpds
 
 oc new-project ${PROJECT}
@@ -17,6 +17,8 @@ declare -r CENTRAL_HOST=$(oc get route central -n acs -o jsonpath='{.spec.host}'
 CENTRAL_BUNDLES_URL="https://$CENTRAL_HOST/v1/cluster-init/init-bundles"
 
 curl -X POST -k -u "admin:$ADMPASSWD" --header "Content-Type: application/json" --data '{"name":"'$BUNDLE_NAME'"}' $CENTRAL_BUNDLES_URL | jq -r '.kubectlBundle' | base64 -d | oc create -n $PROJECT  -f -
+
+# curl -H "Authorization: Bearer $ROX_API_TOKEN" -X POST --data @security_permissions_set.json  --insecure $URL_CENTRAL
 
 oc create -f acs/secured-cluster.yaml
 
