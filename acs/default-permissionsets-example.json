@@ -1,0 +1,183 @@
+{
+  "permissionSets": [
+    {
+      "id": "io.stackrox.authz.permissionset.admin",
+      "name": "Admin",
+      "description": "For users: use it to provide read and write access to all the resources",
+      "resourceToAccess": {
+        "APIToken": "READ_WRITE_ACCESS",
+        "Access": "READ_WRITE_ACCESS",
+        "Administration": "READ_WRITE_ACCESS",
+        "Alert": "READ_WRITE_ACCESS",
+        "AllComments": "READ_WRITE_ACCESS",
+        "AuthProvider": "READ_WRITE_ACCESS",
+        "BackupPlugins": "READ_WRITE_ACCESS",
+        "CVE": "READ_WRITE_ACCESS",
+        "Cluster": "READ_WRITE_ACCESS",
+        "ClusterCVE": "READ_WRITE_ACCESS",
+        "Compliance": "READ_WRITE_ACCESS",
+        "ComplianceRunSchedule": "READ_WRITE_ACCESS",
+        "ComplianceRuns": "READ_WRITE_ACCESS",
+        "Config": "READ_WRITE_ACCESS",
+        "DebugLogs": "READ_WRITE_ACCESS",
+        "Deployment": "READ_WRITE_ACCESS",
+        "DeploymentExtension": "READ_WRITE_ACCESS",
+        "Detection": "READ_WRITE_ACCESS",
+        "Group": "READ_WRITE_ACCESS",
+        "Image": "READ_WRITE_ACCESS",
+        "ImageComponent": "READ_WRITE_ACCESS",
+        "ImageIntegration": "READ_WRITE_ACCESS",
+        "Indicator": "READ_WRITE_ACCESS",
+        "Integration": "READ_WRITE_ACCESS",
+        "K8sRole": "READ_WRITE_ACCESS",
+        "K8sRoleBinding": "READ_WRITE_ACCESS",
+        "K8sSubject": "READ_WRITE_ACCESS",
+        "Licenses": "READ_WRITE_ACCESS",
+        "Namespace": "READ_WRITE_ACCESS",
+        "NetworkBaseline": "READ_WRITE_ACCESS",
+        "NetworkGraph": "READ_WRITE_ACCESS",
+        "NetworkGraphConfig": "READ_WRITE_ACCESS",
+        "NetworkPolicy": "READ_WRITE_ACCESS",
+        "Node": "READ_WRITE_ACCESS",
+        "Notifier": "READ_WRITE_ACCESS",
+        "Policy": "READ_WRITE_ACCESS",
+        "ProbeUpload": "READ_WRITE_ACCESS",
+        "ProcessWhitelist": "READ_WRITE_ACCESS",
+        "Risk": "READ_WRITE_ACCESS",
+        "Role": "READ_WRITE_ACCESS",
+        "ScannerBundle": "READ_WRITE_ACCESS",
+        "ScannerDefinitions": "READ_WRITE_ACCESS",
+        "Secret": "READ_WRITE_ACCESS",
+        "SensorUpgradeConfig": "READ_WRITE_ACCESS",
+        "ServiceAccount": "READ_WRITE_ACCESS",
+        "ServiceIdentity": "READ_WRITE_ACCESS",
+        "SignatureIntegration": "READ_WRITE_ACCESS",
+        "User": "READ_WRITE_ACCESS",
+        "VulnerabilityManagementApprovals": "READ_WRITE_ACCESS",
+        "VulnerabilityManagementRequests": "READ_WRITE_ACCESS",
+        "VulnerabilityReports": "READ_WRITE_ACCESS",
+        "WatchedImage": "READ_WRITE_ACCESS"
+      }
+    },
+    {
+      "id": "io.stackrox.authz.permissionset.analyst",
+      "name": "Analyst",
+      "description": "For users: use it to give read-only access to all the resources",
+      "resourceToAccess": {
+        "APIToken": "READ_ACCESS",
+        "Access": "READ_ACCESS",
+        "Administration": "READ_ACCESS",
+        "Alert": "READ_ACCESS",
+        "AllComments": "READ_ACCESS",
+        "AuthProvider": "READ_ACCESS",
+        "BackupPlugins": "READ_ACCESS",
+        "CVE": "READ_ACCESS",
+        "Cluster": "READ_ACCESS",
+        "ClusterCVE": "READ_ACCESS",
+        "Compliance": "READ_ACCESS",
+        "ComplianceRunSchedule": "READ_ACCESS",
+        "ComplianceRuns": "READ_ACCESS",
+        "Config": "READ_ACCESS",
+        "Deployment": "READ_ACCESS",
+        "DeploymentExtension": "READ_ACCESS",
+        "Detection": "READ_ACCESS",
+        "Group": "READ_ACCESS",
+        "Image": "READ_ACCESS",
+        "ImageComponent": "READ_ACCESS",
+        "ImageIntegration": "READ_ACCESS",
+        "Indicator": "READ_ACCESS",
+        "Integration": "READ_ACCESS",
+        "K8sRole": "READ_ACCESS",
+        "K8sRoleBinding": "READ_ACCESS",
+        "K8sSubject": "READ_ACCESS",
+        "Licenses": "READ_ACCESS",
+        "Namespace": "READ_ACCESS",
+        "NetworkBaseline": "READ_ACCESS",
+        "NetworkGraph": "READ_ACCESS",
+        "NetworkGraphConfig": "READ_ACCESS",
+        "NetworkPolicy": "READ_ACCESS",
+        "Node": "READ_ACCESS",
+        "Notifier": "READ_ACCESS",
+        "Policy": "READ_ACCESS",
+        "ProbeUpload": "READ_ACCESS",
+        "ProcessWhitelist": "READ_ACCESS",
+        "Risk": "READ_ACCESS",
+        "Role": "READ_ACCESS",
+        "ScannerBundle": "READ_ACCESS",
+        "ScannerDefinitions": "READ_ACCESS",
+        "Secret": "READ_ACCESS",
+        "SensorUpgradeConfig": "READ_ACCESS",
+        "ServiceAccount": "READ_ACCESS",
+        "ServiceIdentity": "READ_ACCESS",
+        "SignatureIntegration": "READ_ACCESS",
+        "User": "READ_ACCESS",
+        "VulnerabilityManagementApprovals": "READ_ACCESS",
+        "VulnerabilityManagementRequests": "READ_ACCESS",
+        "VulnerabilityReports": "READ_ACCESS",
+        "WatchedImage": "READ_ACCESS"
+      }
+    },
+    {
+      "id": "io.stackrox.authz.permissionset.continuousintegration",
+      "name": "Continuous Integration",
+      "description": "For automation: it includes the permissions required to enforce deployment policies",
+      "resourceToAccess": {
+        "Detection": "READ_ACCESS",
+        "Image": "READ_WRITE_ACCESS"
+      }
+    },
+    {
+      "id": "io.stackrox.authz.permissionset.none",
+      "name": "None",
+      "description": "For users: use it to provide no read and write access to any resource",
+      "resourceToAccess": {}
+    },
+    {
+      "id": "io.stackrox.authz.permissionset.scopemanager",
+      "name": "Scope Manager",
+      "description": "For users: use it to create and modify scopes for the purpose of access control or vulnerability reporting",
+      "resourceToAccess": {
+        "AuthProvider": "READ_ACCESS",
+        "Cluster": "READ_ACCESS",
+        "Namespace": "READ_ACCESS",
+        "Role": "READ_WRITE_ACCESS"
+      }
+    },
+    {
+      "id": "io.stackrox.authz.permissionset.sensorcreator",
+      "name": "Sensor Creator",
+      "description": "For automation: it consists of the permissions to create Sensors in secured clusters",
+      "resourceToAccess": {
+        "Cluster": "READ_WRITE_ACCESS",
+        "ServiceIdentity": "READ_WRITE_ACCESS"
+      }
+    },
+    {
+      "id": "io.stackrox.authz.permissionset.vulnmgmtapprover",
+      "name": "Vulnerability Management Approver",
+      "description": "For users: use it to provide access to approve vulnerability deferrals or false positive requests",
+      "resourceToAccess": {
+        "VulnerabilityManagementApprovals": "READ_WRITE_ACCESS"
+      }
+    },
+    {
+      "id": "io.stackrox.authz.permissionset.vulnmgmtrequester",
+      "name": "Vulnerability Management Requester",
+      "description": "For users: use it to provide access to request vulnerability deferrals or false positives",
+      "resourceToAccess": {
+        "VulnerabilityManagementRequests": "READ_WRITE_ACCESS"
+      }
+    },
+    {
+      "id": "io.stackrox.authz.permissionset.vulnreporter",
+      "name": "Vulnerability Report Creator",
+      "description": "For users: use it to create and manage vulnerability reporting configurations for scheduled vulnerability reports",
+      "resourceToAccess": {
+        "Image": "READ_ACCESS",
+        "Notifier": "READ_ACCESS",
+        "Role": "READ_ACCESS",
+        "VulnerabilityReports": "READ_WRITE_ACCESS"
+      }
+    }
+  ]
+}

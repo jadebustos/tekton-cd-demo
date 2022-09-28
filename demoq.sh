@@ -21,7 +21,7 @@ err() {
 
 while (( "$#" )); do
   case "$1" in
-    install|uninstall|start|promote)
+    install|uninstall|start|promote|status)
       COMMAND=$1
       shift
       ;;
@@ -57,6 +57,7 @@ command.help() {
   COMMANDS:
       install                        Sets up the demo and creates namespaces
       uninstall                      Deletes the demo
+      status
       start                          Starts the deploy DEV pipeline
       promote                        Starts the deploy STAGE pipeline
       help                           Help about this command
@@ -121,6 +122,9 @@ command.install() {
   | sed '/petclinic-config.hooks/,+9 s/^/          #/' \
   | oc create -f - -n $cicd_prj
 
+  oc adm policy add-role-to-user edit developer -n demo-cicd
+  oc adm policy add-role-to-user edit developer -n demo-dev
+  
   cat <<-EOF
 
 ############################################################################
@@ -162,6 +166,15 @@ command.promote() {
 
 command.uninstall() {
   oc delete project $dev_prj $stage_prj $cicd_prj
+}
+
+command.status() {
+cat <<-EOF
+    Gogs Git Server: http://$(oc get route gogs -o template --template='{{.spec.host}}' -n $cicd_prj)/explore/repos
+    Reports Server: http://$(oc get route reports-repo -o template --template='{{.spec.host}}' -n $cicd_prj)
+    SonarQube: https://$(oc get route sonarqube -o template --template='{{.spec.host}}' -n $cicd_prj)
+    Sonatype Nexus: http://$(oc get route nexus -o template --template='{{.spec.host}}' -n $cicd_prj)
+EOF
 }
 
 main() {

@@ -2,7 +2,7 @@
 
 # namespace. Warning it is hardcoded into acs/central.yaml and so
 
-# acs
+# ACS
 PROJECT=acs
 declare -r ADMPASSWD=redhat
 BUNDLE_NAME=rhpds
@@ -73,7 +73,7 @@ PROVIDER_ID=$(apicall \
 "authProviders" \
 | jq -r '.id')
 
-# groupsbatch
+## groupsbatch
 apicall \
 '
 {
@@ -95,6 +95,8 @@ apicall \
   ]}
 ' \
 "groupsbatch"
+
+# Auth
 
 #oc create secret generic htpass-secret --from-file=htpasswd=auth/users.htpasswd -n openshift-config
 #oc create -f auth/oauth.yaml
