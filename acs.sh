@@ -4,7 +4,7 @@
 
 # ACS
 PROJECT=acs
-declare -r ADMPASSWD=r3dh4t1!
+declare -r ADMPASSWD=redhat
 BUNDLE_NAME=rhpds
 
 oc new-project ${PROJECT}
