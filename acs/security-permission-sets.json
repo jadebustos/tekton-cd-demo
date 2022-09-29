@@ -1,6 +1,6 @@
 {
 
-    "name": "Security Perms 2",
+    "name": "Security",
     "description": "Security permissions",
     "resourceToAccess": 
 
@@ -10,13 +10,11 @@
         "Administration": "READ_ACCESS",
         "Alert": "READ_ACCESS",
 	"AllComments": "READ_ACCESS",
-	"AuthPlugin": "READ_ACCESS",
 	"AuthProvider": "READ_ACCESS",
         "CVE": "READ_WRITE_ACCESS",
         "Cluster": "READ_ACCESS",
 	"ClusterCVE": "READ_ACCESS",
 	"Compliance": "READ_ACCESS",
-	"ComplianceOperator": "READ_ACCESS",
 	"ComplianceRunSchedule": "READ_ACCESS",
         "ComplianceRuns": "READ_ACCESS",
         "Config": "READ_ACCESS",

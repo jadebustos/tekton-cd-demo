@@ -124,7 +124,7 @@ command.install() {
 
   oc adm policy add-role-to-user edit developer -n demo-cicd
   oc adm policy add-role-to-user edit developer -n demo-dev
-  
+
   cat <<-EOF
 
 ############################################################################

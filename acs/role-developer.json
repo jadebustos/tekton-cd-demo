@@ -1,0 +1,7 @@
+{
+  "name": "Developer",
+  "description": "Developer",
+  "permissionSetId": "io.stackrox.authz.permissionset.none",
+  "accessScopeId": "io.stackrox.authz.accessscope.unrestricted",
+  "globalAccess": "NO_ACCESS"
+}
