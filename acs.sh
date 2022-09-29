@@ -60,36 +60,39 @@ PROVIDER_ID=$(apicall \
 
 for subject in ${SUBJECTS[*]}; do
     apicall \
-    "@acs/role-${subject}.json" \
-    "roles/${subject^}"
+      "@acs/role-${subject}.json" \
+      "roles/${subject^}"
 
     apicall \
-    "@acs/${subject}-permission-sets.json" \
-    "permissionsets"
+      "@acs/${subject}-permission-sets.json" \
+      "permissionsets"
 
     apicall \
-    '
-    {
-    "previous_groups":[],
-    "required_groups":
-    [{
+      '
+      {
+        "previous_groups":[],
+        "required_groups":
+      [{
         "roleName":"'${subject^}'",
         "props":{
         "authProviderId":"'${PROVIDER_ID}'",
         "key":"name",
         "value":"'${subject}'",
         "id":""}
-    },
-    {
+      },
+      {
         "props":{
         "authProviderId":"'${PROVIDER_ID}'"},
         "roleName":"None"
         }
-    ]}
-    ' \
-    "groupsbatch"
-
+      ]}
+      ' \
+      "groupsbatch"
 done
+
+apicall \
+  "@acs/log4j-policy.json" \
+  "policies?enableStrictValidation=true"
 
 #oc create secret generic htpass-secret --from-file=htpasswd=auth/users.htpasswd -n openshift-config
 #oc create -f auth/oauth.yaml
