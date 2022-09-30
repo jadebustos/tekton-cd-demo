@@ -59,13 +59,18 @@ PROVIDER_ID=$(apicall \
 | jq -r '.id')
 
 for subject in ${SUBJECTS[*]}; do
-    apicall \
-      "@acs/role-${subject}.json" \
-      "roles/${subject^}"
+
+    ID=$(apicall \
+      "@acs/${subject}-permission-sets.json" \
+      "permissionsets" \
+      | jq -r '.id')
+
+    PAYLOAD=$(cat acs/role-${subject}.json \
+      | jq '.permissionSetId = "'${ID}'"')
 
     apicall \
-      "@acs/${subject}-permission-sets.json" \
-      "permissionsets"
+      "${PAYLOAD}" \
+      "roles/${subject^}"
 
     apicall \
       '
@@ -79,12 +84,7 @@ for subject in ${SUBJECTS[*]}; do
         "key":"name",
         "value":"'${subject}'",
         "id":""}
-      },
-      {
-        "props":{
-        "authProviderId":"'${PROVIDER_ID}'"},
-        "roleName":"None"
-        }
+      }
       ]}
       ' \
       "groupsbatch"
