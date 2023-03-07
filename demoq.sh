@@ -121,7 +121,7 @@ command.install() {
   | oc create -f - -n $cicd_prj
 
   # TODO fix sometimes can clone an empty repo
-  until git clone "http://$GOGS_HOSTNAME/gogs/quarkus-petclinic.git"; do sleep 10; done
+  until git clone -b cnd "http://$GOGS_HOSTNAME/gogs/quarkus-petclinic.git"; do sleep 10; done
   oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql.yml -n $dev_prj
   oc wait --for=condition=available --timeout=60s deployment/postgresql -n $dev_prj
   oc apply -f quarkus-petclinic/src/main/kubernetes/pgsql-db-creator.yml -n $dev_prj
