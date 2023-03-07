@@ -142,6 +142,7 @@ command.install() {
   git add --all
   git -c user.name='demo' -c user.email='demo@example.com' commit -m "to quarkus"
   git push "http://gogs:gogs@$GOGS_HOSTNAME/gogs/quarkus-petclinic-config.git"
+  rm -rf quarkus-petclinic-config
   popd
 
   cat <<-EOF
