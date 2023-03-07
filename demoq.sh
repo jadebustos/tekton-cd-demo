@@ -72,15 +72,15 @@ command.install() {
   info "Creating namespaces $cicd_prj, $dev_prj, $stage_prj"
   oc get ns $cicd_prj 2>/dev/null  || { 
     oc new-project $cicd_prj
-    oc delete limitrange -n $cicd_prj ${cicd_prj}-core-resource-limits || true
+    oc delete limitrange -n $cicd_prj ${cicd_prj}-core-resource-limits &>/dev/null || true
   }
   oc get ns $dev_prj 2>/dev/null  || { 
     oc new-project $dev_prj
-    oc delete limitrange -n $dev_prj ${dev_prj}-core-resource-limits || true
+    oc delete limitrange -n $dev_prj ${dev_prj}-core-resource-limits &>/dev/null || true
   }
   oc get ns $stage_prj 2>/dev/null  || { 
     oc new-project $stage_prj 
-    oc delete limitrange -n $stage_prj ${stage_prj}-core-resource-limits || true
+    oc delete limitrange -n $stage_prj ${stage_prj}-core-resource-limits &>/dev/null || true
   }
 
   info "Configure service account permissions for pipeline"
@@ -142,8 +142,8 @@ command.install() {
   git add --all
   git -c user.name='demo' -c user.email='demo@example.com' commit -m "to quarkus"
   git push "http://gogs:gogs@$GOGS_HOSTNAME/gogs/quarkus-petclinic-config.git"
-  rm -rf quarkus-petclinic-config
   popd
+  rm -rf quarkus-petclinic-config
 
   cat <<-EOF
 
