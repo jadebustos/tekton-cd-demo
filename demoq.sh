@@ -111,7 +111,7 @@ command.install() {
   oc rollout status deployment/gogs -n $cicd_prj
 
   # TODO replace log messages
-  sed 's#"https://github.com/siamaksade/spring-petclinic"#"https://github.com/redhat-developer-demos/quarkus-petclinic"#' config/gogs-init-taskrun.yaml \
+  sed 's#"https://github.com/siamaksade/spring-petclinic"#"https://github.com/aolle/quarkus-petclinic"#' config/gogs-init-taskrun.yaml \
   | sed 's#spring-petclinic/hooks#quarkus-petclinic/hooks#' \
   | sed 's#spring-petclinic-config/hooks#quarkus-petclinic-config/hooks#' \
   | sed 's#\(.*data_repo.*quarkus-petclinic.*repo_name.*\)spring-petclinic\(.*\)#\1quarkus-petclinic\2#' \
