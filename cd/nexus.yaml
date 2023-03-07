@@ -21,6 +21,14 @@ spec:
       containers:
       - name: nexus
         image: quay.io/siamaksade/nexus3:3.16.2
+        securityContext:
+           allowPrivilegeEscalation: false
+           runAsNonRoot: true
+           capabilities:
+             drop:
+               - ALL
+           seccompProfile:
+             type: RuntimeDefault
         env:
         - name: CONTEXT_PATH
           value: /

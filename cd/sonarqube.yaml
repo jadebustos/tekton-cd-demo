@@ -25,6 +25,14 @@ spec:
       - name: sonarqube
         imagePullPolicy: Always
         image: docker.io/sonarqube:8.9.9-community
+        securityContext:
+           allowPrivilegeEscalation: false
+           runAsNonRoot: true
+           capabilities:
+             drop:
+               - ALL
+           seccompProfile:
+             type: RuntimeDefault
         env:
         - name: SONAR_FORCEAUTHENTICATION
           value: "false"

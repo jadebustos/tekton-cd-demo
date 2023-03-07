@@ -28,6 +28,14 @@ spec:
       - name: postgresql
         imagePullPolicy: Always
         image: postgresql:latest
+        securityContext:
+           allowPrivilegeEscalation: false
+           runAsNonRoot: true
+           capabilities:
+             drop:
+               - ALL
+           seccompProfile:
+             type: RuntimeDefault
         env:
         - name: POSTGRESQL_USER
           value: gogs
@@ -109,6 +117,14 @@ spec:
       - name: gogs
         imagePullPolicy: Always
         image: quay.io/siamaksade/gogs:stable
+        securityContext:
+           allowPrivilegeEscalation: false
+           runAsNonRoot: true
+           capabilities:
+             drop:
+               - ALL
+           seccompProfile:
+             type: RuntimeDefault
         ports:
         - containerPort: 3000
           protocol: TCP
