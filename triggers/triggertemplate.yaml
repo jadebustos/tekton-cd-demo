@@ -7,13 +7,13 @@ spec:
   params:
   - name: gitrevision
     description: The git revision
-    default: master
+    default: cnd
   - name: gitshortsha
     description: The short commit sha
-    default: master
+    default: cnd
   - name: gitbranchname
     description: The branch name
-    default: master
+    default: cnd
   - name: gitrepositoryurl
     description: The git repository url
   - name: message

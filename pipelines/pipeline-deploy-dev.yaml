@@ -11,7 +11,7 @@ spec:
     - name: APP_SOURCE_REVISION
       type: string
       description: The application git revision
-      default: master
+      default: cnd
     - name: APP_CONFIG_GIT
       type: string
       description: The application configuration git repository
