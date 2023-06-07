@@ -31,7 +31,16 @@
     cmd: oc -n "{{ centralNamespace }}" get routes/central -o jsonpath='{.spec.host}'
   register: centralUrl
 
+- name: setting var to store admin password
+  ansible.builtin.set_fact:
+    acsAdminPass: centralPass.stdout
+
+- name: setting var to store acs's console url
+  ansible.builtin.set_fact:
+    acsUrl: centralUrl.stdout_lines
+
 - name: print central connection data on stdout
   debug:
     msg: "Central password for admin user: {{ centralPass.stdout }} ACS console: https://{{ centralUrl.stdout_lines }}"
-    #msg: "{{ centralUrl.stdout_lines }}"
+
+  

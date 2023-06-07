@@ -25,3 +25,5 @@ minReplicas: 2
 replicas: 3
 
 centralYaml: '/tmp/central.yaml'
+
+roxcliUrl: 'https://mirror.openshift.com/pub/rhacs/assets/4.0.2/bin/Linux/roxctl'

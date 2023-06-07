@@ -27,6 +27,8 @@ This demo has been tested on the following versions:
 * Red Hat OpenShift: 4.13
 * Red Hat Advanced Cluster Security for Kubernetes (ACS): 4.0.2
 * Ansible: 2.14.5
+* Fedora 37:
+  * _/tmp_ will need exec perms if mounted in a different filesystem.
 
 ## Deploy Red Advanced Cluster Security for Kubernetes (ACS)
 
@@ -56,11 +58,11 @@ You will have to wait a bit until all the pods are deployed and started. When fi
 ```bash
 $ oc get pods -n stackrox
 NAME                          READY   STATUS    RESTARTS   AGE
-central-58bb4f9dfb-p2cs9      1/1     Running   0          10m
-central-db-d8ffcb4fc-8n9p8    1/1     Running   0          10m
-scanner-8b4d6b6b5-gjg5v       1/1     Running   0          10m
-scanner-8b4d6b6b5-t7hlv       1/1     Running   0          10m
-scanner-db-5474459589-2dzpx   1/1     Running   0          10m
+central-58bb4f9dfb-p2cs9      1/1     Running   0          1m
+central-db-d8ffcb4fc-8n9p8    1/1     Running   0          1m
+scanner-8b4d6b6b5-gjg5v       1/1     Running   0          1m
+scanner-8b4d6b6b5-t7hlv       1/1     Running   0          1m
+scanner-db-5474459589-2dzpx   1/1     Running   0          1m
 $
 ```
 

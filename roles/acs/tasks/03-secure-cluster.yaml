@@ -1,0 +1,7 @@
+---
+
+- name: download roxcli
+  ansible.builtin.get_url:
+    url: "{{ roxcliUrl }}"
+    dest: /tmp/roxctl
+    mode: '0755'
