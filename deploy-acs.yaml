@@ -2,6 +2,6 @@
 
 - name: deploy acs
   hosts: localhost
-  gather_facts: true
+  gather_facts: false
   roles:
     - acs
