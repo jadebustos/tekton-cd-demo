@@ -50,7 +50,7 @@ ok: [localhost] => {
 $
 ```
 
-You need to note the Central admin password which is printed on stdout.
+You will need to note the Central admin password which is printed on stdout.
 
 You will have to wait a bit until all the pods are deployed and started. When finished:
 
@@ -65,7 +65,7 @@ scanner-db-5474459589-2dzpx   1/1     Running   0          10m
 $
 ```
 
-After that ACS Central will have successfully deployed. 
+After that ACS Central will have been successfully deployed and you can start working with it. 
 
 
 ## Deploy DEV Pipeline
