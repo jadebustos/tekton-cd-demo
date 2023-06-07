@@ -6,6 +6,32 @@
     dest: "{{ centralYaml }}"
     mode: '0644'
 
+- name: create namespace to deploy central
+  ansible.builtin.shell:
+    cmd: oc new-project "{{ centralNamespace }}"
+  ignore_errors: yes
+
+- name: delete limits in the central namespace
+  ansible.builtin.shell:
+    cmd: oc delete limitrange -n "{{ centralNamespace }} {{ centralNamespace }}-core-resource-limits"
+  ignore_errors: yes 
+
 - name: deploy central
   ansible.builtin.shell:
-    cmd: oc new-project "{{ centralNamespace }}" ; oc apply -f "{{ centralYaml }}" -n "{{ centralNamespace }}"
+    cmd: oc apply -f "{{ centralYaml }}" -n "{{ centralNamespace }}"
+
+# sleep some seconds to wait the secret to be created
+- name: get central password
+  ansible.builtin.shell:
+    cmd: sleep 30 ; oc -n "{{ centralNamespace }}" get secret central-htpasswd -o jsonpath="{.data['password']}" | base64 -d
+  register: centralPass
+
+- name: get central url
+  ansible.builtin.shell:
+    cmd: oc -n "{{ centralNamespace }}" get routes/central -o jsonpath='{.spec.host}'
+  register: centralUrl
+
+- name: print central connection data on stdout
+  debug:
+    msg: "Central password for admin user: {{ centralPass.stdout }} ACS console: https://{{ centralUrl.stdout_lines }}"
+    #msg: "{{ centralUrl.stdout_lines }}"

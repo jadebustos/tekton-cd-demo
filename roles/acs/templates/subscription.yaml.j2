@@ -2,12 +2,12 @@
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: {{ name }}
-  namespace: {{ namespace }}
+  name: {{ acsName }}
+  namespace: {{ acsNamespace }}
 spec:
   channel: {{ channel }}
   installPlanApproval: {{ approval }}
-  name: {{ name }}
+  name: {{ acsName }}
   source: {{ catalogSource }}
   sourceNamespace: {{ catalogSourceNamespace }}
   startingCSV: {{ currentCSV }}

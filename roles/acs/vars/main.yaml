@@ -11,14 +11,14 @@ catalogSource: 'redhat-operators'
 # oc get packagemanifests rhacs-operator -o jsonpath={.status.catalogSourceNamespace}
 catalogSourceNamespace: 'openshift-marketplace'
 
-name: 'rhacs-operator'
-namespace: 'rhacs-operator'
+acsName: 'rhacs-operator'
+acsNamespace: 'rhacs-operator'
 approval: 'Automatic'
 
 subsYaml: '/tmp/subscription.yaml'
 
 # CENTRAL
-centralNamespace: 'stackrox'
+centralNamespace: 'acs-central'
 
 maxReplicas: 5
 minReplicas: 2

@@ -41,16 +41,15 @@ To deploy ACS you can setup some parameters in [roles/acs/vars/main.yaml](roles/
 ```bash
 $ ansible-playbook deploy-acs.yaml
 ...
-
-TASK [acs : show central password on stdout] *****************************************************************************************************************************************************************************************************************
+TASK [acs : print central connection data on stdout] **********************************************************************************************************************************************************************************************************
 ok: [localhost] => {
-    "msg": "Central password: PcgljTcf88wgPStxwjlcdLuHO"
+    "msg": "Central password for admin user: ZHnXCYWasErC5RpizHSD6ZNfO ACS console: https://['central-acs-central.apps.ocp.labmad.redhat.com']"
 }
 ...
 $
 ```
 
-You will need to note the Central admin password which is printed on stdout.
+You will need to note the Central admin password and ACS's console url which will be printed on stdout.
 
 You will have to wait a bit until all the pods are deployed and started. When finished:
 
