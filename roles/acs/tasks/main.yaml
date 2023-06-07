@@ -2,3 +2,4 @@
 
 - include_tasks: 01-operator.yaml
 - include_tasks: 02-central.yaml
+- include_tasks: 03-password.yaml

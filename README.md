@@ -40,7 +40,17 @@ To deploy ACS you can setup some parameters in [roles/acs/vars/main.yaml](roles/
 
 ```bash
 $ ansible-playbook deploy-acs.yaml
+...
+
+TASK [acs : show central password on stdout] *****************************************************************************************************************************************************************************************************************
+ok: [localhost] => {
+    "msg": "Central password: PcgljTcf88wgPStxwjlcdLuHO"
+}
+...
+$
 ```
+
+You need to note the Central admin password which is printed on stdout.
 
 You will have to wait a bit until all the pods are deployed and started. When finished:
 
@@ -54,6 +64,9 @@ scanner-8b4d6b6b5-t7hlv       1/1     Running   0          10m
 scanner-db-5474459589-2dzpx   1/1     Running   0          10m
 $
 ```
+
+After that ACS Central will have successfully deployed. 
+
 
 ## Deploy DEV Pipeline
 
