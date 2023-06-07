@@ -1,0 +1,11 @@
+---
+
+- name: create subscription yaml to deploy rhacs operator
+  ansible.builtin.template:
+    src: subscription.yaml.j2
+    dest: "{{ subsYaml }}"
+    mode: '0644'
+
+- name: deploy rhacs operator
+  ansible.builtin.shell:
+    cmd: oc apply -f "{{ subsYaml }}"

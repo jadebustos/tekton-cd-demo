@@ -1,0 +1,13 @@
+# operator.yaml
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: {{ name }}
+  namespace: {{ namespace }}
+spec:
+  channel: {{ channel }}
+  installPlanApproval: {{ approval }}
+  name: {{ name }}
+  source: {{ catalogSource }}
+  sourceNamespace: {{ catalogSourceNamespace }}
+  startingCSV: {{ currentCSV }}

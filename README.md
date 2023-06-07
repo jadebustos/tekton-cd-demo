@@ -5,6 +5,8 @@
 # CI/CD Demo with Tekton Pipelines
 
 This repo is CI/CD demo using [Tekton](http://www.tekton.dev) pipelines on OpenShift which builds and deploys the [Spring PetClinic](https://github.com/spring-projects/spring-petclinic) sample Spring Boot application. This demo creates:
+
+* An ACS instance. 
 * 3 namespaces for CI/CD, DEV and STAGE projects
 * 2 Tekton pipelines for deploying application to DEV and promoting to STAGE environments
 * Gogs git server (username/password: `gogs`/`gogs`)
@@ -17,6 +19,41 @@ This repo is CI/CD demo using [Tekton](http://www.tekton.dev) pipelines on OpenS
 <p align="center">
   <img width="580" src="docs/images/projects.svg">
 </p>
+
+## Versions
+
+This demo has been tested on the following versions:
+
+* Red Hat OpenShift: 4.13
+* Red Hat Advanced Cluster Security for Kubernetes (ACS): 4.0.2
+* Ansible: 2.14.5
+
+## Deploy Red Advanced Cluster Security for Kubernetes (ACS)
+
+To deploy ACS you must:
+
+* Have _ansible_ installed.
+* Have the _oc_ client installed.
+* Before executing the ansible playbooks you must need to perform a login using the _oc_ client with the **kubeadmin** user or a similar one.
+
+To deploy ACS you can setup some parameters in [roles/acs/vars/main.yaml](roles/acs/vars/main.yaml) if necessary, after that run the following:
+
+```bash
+$ ansible-playbook deploy-acs.yaml
+```
+
+You will have to wait a bit until all the pods are deployed and started. When finished:
+
+```bash
+$ oc get pods -n stackrox
+NAME                          READY   STATUS    RESTARTS   AGE
+central-58bb4f9dfb-p2cs9      1/1     Running   0          10m
+central-db-d8ffcb4fc-8n9p8    1/1     Running   0          10m
+scanner-8b4d6b6b5-gjg5v       1/1     Running   0          10m
+scanner-8b4d6b6b5-t7hlv       1/1     Running   0          10m
+scanner-db-5474459589-2dzpx   1/1     Running   0          10m
+$
+```
 
 ## Deploy DEV Pipeline
 

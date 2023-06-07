@@ -1,0 +1,7 @@
+---
+
+- name: deploy acs
+  hosts: localhost
+  gather_facts: true
+  roles:
+    - acs

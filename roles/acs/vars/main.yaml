@@ -1,0 +1,27 @@
+---
+
+# RHACS OPERATOR
+# oc get packagemanifests rhacs-operator -o jsonpath="{range .status.channels[*]}Channel: {.name} currentCSV: {.currentCSV}{'\n'}{end}"
+channel: 'stable'
+currentCSV: 'rhacs-operator.v4.0.2'
+
+# oc get packagemanifests rhacs-operator -o jsonpath={.status.catalogSource}
+catalogSource: 'redhat-operators'
+
+# oc get packagemanifests rhacs-operator -o jsonpath={.status.catalogSourceNamespace}
+catalogSourceNamespace: 'openshift-marketplace'
+
+name: 'rhacs-operator'
+namespace: 'rhacs-operator'
+approval: 'Automatic'
+
+subsYaml: '/tmp/subscription.yaml'
+
+# CENTRAL
+centralNamespace: 'stackrox'
+
+maxReplicas: 5
+minReplicas: 2
+replicas: 3
+
+centralYaml: '/tmp/central.yaml'

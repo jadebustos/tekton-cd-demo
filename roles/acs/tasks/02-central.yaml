@@ -1,0 +1,11 @@
+---
+
+- name: create yaml to deploy central
+  ansible.builtin.template:
+    src: central.yaml.j2
+    dest: "{{ centralYaml }}"
+    mode: '0644'
+
+- name: deploy central
+  ansible.builtin.shell:
+    cmd: oc new-project "{{ centralNamespace }}" ; oc apply -f "{{ centralYaml }}" -n "{{ centralNamespace }}"
