@@ -33,14 +33,14 @@
 
 - name: setting var to store admin password
   ansible.builtin.set_fact:
-    acsAdminPass: centralPass.stdout
+    acsAdminPass: "{{ centralPass.stdout }}"
 
 - name: setting var to store acs's console url
   ansible.builtin.set_fact:
-    acsUrl: centralUrl.stdout_lines
+    acsUrl: "{{ centralUrl.stdout_lines[0] }}"
 
 - name: print central connection data on stdout
   debug:
-    msg: "Central password for admin user: {{ centralPass.stdout }} ACS console: https://{{ centralUrl.stdout_lines }}"
+    msg: "Central password for admin user: {{ acsAdminPass }} ACS console: https://{{ acsUrl }}"
 
   
