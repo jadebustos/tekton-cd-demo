@@ -6,6 +6,11 @@
     dest: "{{ subsYaml }}"
     mode: '0644'
 
+- name: create namespace to deploy rhacs-operator
+  ansible.builtin.shell:
+    cmd: oc new-project "{{ acsNamespace }}"
+  ignore_errors: yes
+
 - name: deploy rhacs operator
   ansible.builtin.shell:
     cmd: oc apply -f "{{ subsYaml }}"

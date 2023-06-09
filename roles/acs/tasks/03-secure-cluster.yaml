@@ -5,3 +5,26 @@
     url: "{{ roxcliUrl }}"
     dest: /tmp/roxctl
     mode: '0755'
+
+# sleep some seconds to wait the secret to be created
+- name: get central password
+  ansible.builtin.shell:
+    cmd: oc -n "{{ centralNamespace }}" get secret central-htpasswd -o jsonpath="{.data['password']}" | base64 -d
+  register: centralPass
+
+- name: get central url
+  ansible.builtin.shell:
+    cmd: oc -n "{{ centralNamespace }}" get routes/central -o jsonpath='{.spec.host}'
+  register: centralUrl
+
+- name: setting var to store admin password
+  ansible.builtin.set_fact:
+    acsAdminPass: "{{ centralPass.stdout }}"
+
+- name: setting var to store acs's console url
+  ansible.builtin.set_fact:
+    acsUrl: "{{ centralUrl.stdout_lines[0] }}"
+
+- name: print central connection data on stdout
+  debug:
+    msg: "Central password for admin user: {{ acsAdminPass }} ACS console: https://{{ acsUrl }}"
