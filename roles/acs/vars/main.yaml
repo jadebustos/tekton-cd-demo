@@ -27,6 +27,7 @@ maxReplicas: 5
 minReplicas: 2
 replicas: 3
 
+clusterName: 'acsdemo'
 centralYaml: '/tmp/central.yaml'
 
 # SECURE CLUSTER
@@ -34,4 +35,5 @@ roxcliUrl: 'https://mirror.openshift.com/pub/rhacs/assets/4.0.2/bin/Linux/roxctl
 roxctlCmd : '/tmp/roxctl'
 
 bundleYaml: '/tmp/acsdemobundle.yaml'
+secureClusterYaml: '/tmp/securecluster.yaml'
 

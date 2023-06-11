@@ -21,23 +21,17 @@
 
 - name: deploy central
   ansible.builtin.shell:
-    cmd: oc apply -f "{{ centralYaml }}" -n "{{ centralNamespace }}"
+    cmd: oc apply -f "{{ centralYaml }}" -n "{{ centralNamespace }}" ; sleep 60
 
 - name: get central password
   ansible.builtin.shell:
     cmd: oc -n "{{ centralNamespace }}" get secret central-htpasswd -o jsonpath="{.data['password']}" | base64 -d
   register: centralPass
-  ignore_errors: yes 
-  retries: "{{ numRetries }}"
-  delay: "{{ delayTime }}"
 
 - name: get central url
   ansible.builtin.shell:
     cmd: oc -n "{{ centralNamespace }}" get routes/central -o jsonpath='{.spec.host}'
   register: centralUrl
-  ignore_errors: yes 
-  retries: "{{ numRetries }}"
-  delay: "{{ delayTime }}"
   
 - name: setting var to store admin password
   ansible.builtin.set_fact:
@@ -46,7 +40,3 @@
 - name: setting var to store acs's console url
   ansible.builtin.set_fact:
     acsUrl: "{{ centralUrl.stdout_lines[0] }}"
-
-- name: print central connection data on stdout
-  debug:
-    msg: "Central password for admin user: {{ acsAdminPass }} ACS console: https://{{ acsUrl }}"

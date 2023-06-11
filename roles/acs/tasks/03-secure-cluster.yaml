@@ -6,6 +6,20 @@
     dest: "{{ roxctlCmd }}"
     mode: '0755'
 
-- name: add cluster to acs
+- name: create init bundle
   ansible.builtin.shell:
-    cmd: roxctl -e "{{ acsUrl }}" central init-bundles generate acsdemo --insecure-skip-tls-verify --output-secrets "{{ bundleYaml }}" --password "{{ acsAdminPass }}"
+    cmd: roxctl -e "{{ acsUrl }}":443 central init-bundles generate {{ clusterName }} --insecure-skip-tls-verify --output-secrets "{{ bundleYaml }}" --password "{{ acsAdminPass }}"
+
+- name: apply init bundle
+  ansible.builtin.shell:
+    cmd: oc -n "{{ centralNamespace }}" apply -f "{{ bundleYaml }}"
+
+- name: create yaml to add secure cluster
+  ansible.builtin.template:
+    src: securecluster.yaml.j2
+    dest: "{{ secureClusterYaml }}"
+    mode: '0644'
+
+- name: add secure cluster
+  ansible.builtin.shell:
+    cmd: oc -n "{{ centralNamespace }}" apply -f "{{ secureClusterYaml }}"
