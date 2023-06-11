@@ -1,5 +1,8 @@
 ---
 
+retries: 12
+delay: 10
+
 # RHACS OPERATOR
 # oc get packagemanifests rhacs-operator -o jsonpath="{range .status.channels[*]}Channel: {.name} currentCSV: {.currentCSV}{'\n'}{end}"
 channel: 'stable'
@@ -26,4 +29,9 @@ replicas: 3
 
 centralYaml: '/tmp/central.yaml'
 
+# SECURE CLUSTER
 roxcliUrl: 'https://mirror.openshift.com/pub/rhacs/assets/4.0.2/bin/Linux/roxctl'
+roxctlCmd : '/tmp/roxctl'
+
+bundleYaml: '/tmp/acsdemobundle.yaml'
+

@@ -20,17 +20,20 @@
   ansible.builtin.shell:
     cmd: oc apply -f "{{ centralYaml }}" -n "{{ centralNamespace }}"
 
-# sleep some seconds to wait the secret to be created
 - name: get central password
   ansible.builtin.shell:
-    cmd: sleep 30 ; oc -n "{{ centralNamespace }}" get secret central-htpasswd -o jsonpath="{.data['password']}" | base64 -d
+    cmd: oc -n "{{ centralNamespace }}" get secret central-htpasswd -o jsonpath="{.data['password']}" | base64 -d
   register: centralPass
+  retries: "{{ retries }}"
+  delay: "{{ delay }}"
 
 - name: get central url
   ansible.builtin.shell:
     cmd: oc -n "{{ centralNamespace }}" get routes/central -o jsonpath='{.spec.host}'
   register: centralUrl
-
+  retries: "{{ retries }}"
+  delay: "{{ delay }}"
+  
 - name: setting var to store admin password
   ansible.builtin.set_fact:
     acsAdminPass: "{{ centralPass.stdout }}"

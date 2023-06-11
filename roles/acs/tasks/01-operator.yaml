@@ -1,5 +1,10 @@
 ---
 
+- name: delete namespace to deploy central (if exists)
+  ansible.builtin.shell:
+    cmd: oc delete project "{{ centralNamespace }}"
+  ignore_errors: yes
+  
 - name: create subscription yaml to deploy rhacs operator
   ansible.builtin.template:
     src: subscription.yaml.j2

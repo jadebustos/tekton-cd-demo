@@ -1,13 +1,16 @@
-# operator.yaml
+---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
   name: {{ acsName }}
   namespace: {{ acsNamespace }}
+  labels:
+    operators.coreos.com/rhacs-operator.rhacs-operator: ''
 spec:
   channel: {{ channel }}
   installPlanApproval: {{ approval }}
   name: {{ acsName }}
   source: {{ catalogSource }}
   sourceNamespace: {{ catalogSourceNamespace }}
-  startingCSV: {{ currentCSV }}
+
+
