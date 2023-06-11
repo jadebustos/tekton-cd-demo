@@ -1,20 +1,16 @@
 ---
 
-- name: delete namespace to deploy central (if exists)
-  ansible.builtin.shell:
-    cmd: oc delete project "{{ centralNamespace }}"
-  ignore_errors: yes
-  
-- name: create subscription yaml to deploy rhacs operator
-  ansible.builtin.template:
-    src: subscription.yaml.j2
-    dest: "{{ subsYaml }}"
-    mode: '0644'
 
 - name: create namespace to deploy rhacs-operator
   ansible.builtin.shell:
     cmd: oc new-project "{{ acsNamespace }}"
   ignore_errors: yes
+
+- name: create subscription yaml to deploy rhacs operator
+  ansible.builtin.template:
+    src: subscription.yaml.j2
+    dest: "{{ subsYaml }}"
+    mode: '0644'
 
 - name: deploy rhacs operator
   ansible.builtin.shell:

@@ -1,0 +1,14 @@
+---
+
+- name: delete namespaces (if they exist)
+  ansible.builtin.shell:
+    cmd: oc delete project "{{ item }}"
+  ignore_errors: yes
+  loop:
+    - "{{ centralNamespace }}"
+    - "{{ acsNamespace }}"
+
+- name: delete old yaml files
+  ansible.builtin.shell:
+    cmd: /usr/bin/rm -r /tmp/*.yaml
+  ignore_errors: yes

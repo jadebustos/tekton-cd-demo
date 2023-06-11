@@ -1,5 +1,7 @@
 ---
 
+- include_tasks: 00-health.yaml
 - include_tasks: 01-operator.yaml
 - include_tasks: 02-central.yaml
-#- include_tasks: 03-secure-cluster.yaml
+- include_tasks: 03-secure-cluster.yaml
+- include_tasks: 04-info.yaml

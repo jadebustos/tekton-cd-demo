@@ -1,20 +1,23 @@
 ---
 
+- name: create namespace to deploy central
+  ansible.builtin.shell:
+    cmd: oc new-project "{{ centralNamespace }}"
+  ignore_errors: yes
+
 - name: create yaml to deploy central
   ansible.builtin.template:
     src: central.yaml.j2
     dest: "{{ centralYaml }}"
     mode: '0644'
 
-- name: create namespace to deploy central
-  ansible.builtin.shell:
-    cmd: oc new-project "{{ centralNamespace }}"
-  ignore_errors: yes
-
+# this is needed for some red hat labs which has this configured
 - name: delete limits in the central namespace
   ansible.builtin.shell:
     cmd: oc delete limitrange -n "{{ centralNamespace }} {{ centralNamespace }}-core-resource-limits"
   ignore_errors: yes 
+  retries: "{{ numRetries }}"
+  delay: "{{ delayTime }}"
 
 - name: deploy central
   ansible.builtin.shell:
@@ -24,15 +27,17 @@
   ansible.builtin.shell:
     cmd: oc -n "{{ centralNamespace }}" get secret central-htpasswd -o jsonpath="{.data['password']}" | base64 -d
   register: centralPass
-  retries: "{{ retries }}"
-  delay: "{{ delay }}"
+  ignore_errors: yes 
+  retries: "{{ numRetries }}"
+  delay: "{{ delayTime }}"
 
 - name: get central url
   ansible.builtin.shell:
     cmd: oc -n "{{ centralNamespace }}" get routes/central -o jsonpath='{.spec.host}'
   register: centralUrl
-  retries: "{{ retries }}"
-  delay: "{{ delay }}"
+  ignore_errors: yes 
+  retries: "{{ numRetries }}"
+  delay: "{{ delayTime }}"
   
 - name: setting var to store admin password
   ansible.builtin.set_fact:
@@ -45,5 +50,3 @@
 - name: print central connection data on stdout
   debug:
     msg: "Central password for admin user: {{ acsAdminPass }} ACS console: https://{{ acsUrl }}"
-
-  

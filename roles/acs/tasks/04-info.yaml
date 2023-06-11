@@ -1,0 +1,5 @@
+---
+
+- name: print central connection data on stdout
+  debug:
+    msg: "Central password for admin user: {{ acsAdminPass }} ACS console: https://{{ acsUrl }}"

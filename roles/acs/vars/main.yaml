@@ -1,7 +1,7 @@
 ---
 
-retries: 12
-delay: 10
+numRetries: 12
+delayTime: 10
 
 # RHACS OPERATOR
 # oc get packagemanifests rhacs-operator -o jsonpath="{range .status.channels[*]}Channel: {.name} currentCSV: {.currentCSV}{'\n'}{end}"
