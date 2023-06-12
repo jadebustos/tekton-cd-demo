@@ -26,24 +26,3 @@
   delay: "{{ delayTime }}"
   register: result
   until: result.rc == 0
-
-- name: get central password
-  ansible.builtin.shell:
-    cmd: oc -n "{{ centralNamespace }}" get secret central-htpasswd -o jsonpath="{.data['password']}" | base64 -d
-  register: centralPass
-
-- name: get central url
-  ansible.builtin.shell:
-    cmd: oc -n "{{ centralNamespace }}" get routes/central -o jsonpath='{.spec.host}'
-  register: centralUrl
-  retries: "{{ numRetries }}"
-  delay: "{{ delayTime }}"
-  until: centralUrl.rc == 0
-  
-- name: setting var to store admin password
-  ansible.builtin.set_fact:
-    acsAdminPass: "{{ centralPass.stdout }}"
-
-- name: setting var to store acs's console url
-  ansible.builtin.set_fact:
-    acsUrl: "{{ centralUrl.stdout_lines[0] }}"

@@ -5,8 +5,8 @@
     cmd: oc delete project "{{ item }}"
   ignore_errors: yes
   loop:
-    - "{{ centralNamespace }}"
     - "{{ acsNamespace }}"
+    - "{{ centralNamespace }}"
 
 - name: delete old yaml files
   ansible.builtin.shell:

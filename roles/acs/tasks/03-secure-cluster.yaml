@@ -6,9 +6,30 @@
     dest: "{{ roxctlCmd }}"
     mode: '0755'
 
+- name: get central url
+  ansible.builtin.shell:
+    cmd: oc -n "{{ centralNamespace }}" get routes/central -o jsonpath='{.spec.host}'
+  register: centralUrl
+  retries: "{{ numRetries }}"
+  delay: "{{ delayTime }}"
+  until: centralUrl.rc == 0
+  
+- name: get central password
+  ansible.builtin.shell:
+    cmd: oc -n "{{ centralNamespace }}" get secret central-htpasswd -o jsonpath="{.data['password']}" | base64 -d
+  register: centralPass
+  
+- name: setting var to store admin password
+  ansible.builtin.set_fact:
+    acsAdminPass: "{{ centralPass.stdout }}"
+
+- name: setting var to store acs's console url
+  ansible.builtin.set_fact:
+    acsUrl: "{{ centralUrl.stdout_lines[0] }}"
+
 - name: create init bundle
   ansible.builtin.shell:
-    cmd: /tmp/roxctl -e "{{ acsUrl }}":443 central init-bundles generate "{{ clusterName }}" --insecure-skip-tls-verify --output-secrets "{{ bundleYaml }}" --password "{{ acsAdminPass }}"
+    cmd: "{{ roxctlCmd }} -e {{ acsUrl }}:443 central init-bundles generate {{ clusterName }} --insecure-skip-tls-verify --output-secrets {{ bundleYaml }} --password {{ acsAdminPass }}"
 
 - name: apply init bundle
   ansible.builtin.shell:
