@@ -1,6 +1,6 @@
 ---
 
-numRetries: 12
+numRetries: 30
 delayTime: 10
 
 # RHACS OPERATOR

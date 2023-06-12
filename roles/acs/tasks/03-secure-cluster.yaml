@@ -8,7 +8,7 @@
 
 - name: create init bundle
   ansible.builtin.shell:
-    cmd: roxctl -e "{{ acsUrl }}":443 central init-bundles generate {{ clusterName }} --insecure-skip-tls-verify --output-secrets "{{ bundleYaml }}" --password "{{ acsAdminPass }}"
+    cmd: /tmp/roxctl -e "{{ acsUrl }}":443 central init-bundles generate "{{ clusterName }}" --insecure-skip-tls-verify --output-secrets "{{ bundleYaml }}" --password "{{ acsAdminPass }}"
 
 - name: apply init bundle
   ansible.builtin.shell:
