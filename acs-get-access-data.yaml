@@ -18,7 +18,7 @@
   
     - name: get central password
       ansible.builtin.shell:
-        cmd: "oc -n {{ centralNamespace }} get secret central-htpasswd -o jsonpath={.data['password']} | base64 -d"
+        cmd: "oc -n {{ centralNamespace }} get secret central-htpasswd -o jsonpath=\"{.data['password']}\" | base64 -d"
       register: centralPass
   
     - name: setting var to store admin password
