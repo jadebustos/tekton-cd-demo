@@ -30,7 +30,11 @@
 - name: create init bundle
   ansible.builtin.shell:
     cmd: "{{ roxctlCmd }} -e {{ acsUrl }}:443 central init-bundles generate {{ clusterName }} --insecure-skip-tls-verify --output-secrets {{ bundleYaml }} --password {{ acsAdminPass }}"
-
+  register: result
+  retries: "{{ numRetries }}"
+  delay: "{{ delayTime }}"
+  until: result.rc == 0  
+  
 - name: apply init bundle
   ansible.builtin.shell:
     cmd: oc -n "{{ centralNamespace }}" apply -f "{{ bundleYaml }}"
