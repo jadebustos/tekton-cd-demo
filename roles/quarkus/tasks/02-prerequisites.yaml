@@ -1,0 +1,29 @@
+---
+
+- name: create namespaces for the demo
+  ansible.builtin.shell:
+    cmd: oc new-project "{{ item }}"
+  ignore_errors: yes
+  loop:
+    - "{{ devPrj }}"
+    - "{{ stagePrj }}"
+    - "{{ cicdPrj }}"
+
+# this is needed for some red hat labs which has this configured
+- name: delete limits in the namespaces
+  ansible.builtin.shell:
+    cmd: oc delete limitrange -n "{{ item }} {{ item }}-core-resource-limits"
+  ignore_errors: yes 
+  loop:
+    - "{{ devPrj }}"
+    - "{{ stagePrj }}"
+    - "{{ cicdPrj }}"
+
+- name: configure service account permissions for pipeline
+  ansible.builtin.shell:
+    cmd: oc policy add-role-to-user edit system:serviceaccount:"{{ item }}":pipeline -n "{{ item }}"
+  ignore_errors: yes
+  loop:
+    - "{{ devPrj }}"
+    - "{{ stagePrj }}"
+    - "{{ cicdPrj }}"

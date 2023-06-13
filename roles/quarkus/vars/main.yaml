@@ -2,3 +2,7 @@
 
 subsPipelinesYaml: '/tmp/pipelines-subscription.yaml'
 subsTerminalYaml: '/tmp/terminal-subscription.yaml'
+
+devPrj: 'demo-dev'
+stagePrj: 'demo-stage'
+cicdPrj: 'demo-cicd'
