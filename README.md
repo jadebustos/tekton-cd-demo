@@ -27,7 +27,7 @@ This demo has been tested on the following versions:
 * Red Hat OpenShift: 4.13
 * Red Hat Advanced Cluster Security for Kubernetes (ACS): 4.0.2
 * Ansible: 2.14.5
-* Fedora 37:
+* Fedora 37
 
 ## Deploy Red Advanced Cluster Security for Kubernetes (ACS)
 
