@@ -1,0 +1,4 @@
+---
+
+subsPipelinesYaml: '/tmp/pipelines-subscription.yaml'
+subsTerminalYaml: '/tmp/terminal-subscription.yaml'

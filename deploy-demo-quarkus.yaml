@@ -1,0 +1,7 @@
+---
+
+- name: deploy quarkus demo
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - quarkus

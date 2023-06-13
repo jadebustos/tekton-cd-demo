@@ -1,0 +1,20 @@
+---
+
+- name: create subscription pipelines yaml
+  ansible.builtin.copy:
+    src: pipelines-subscription.yaml
+    dest: "{{ subsPipelinesYaml }}"
+    mode: '0644'
+
+- name: create subscription terminnal yaml
+  ansible.builtin.copy:
+    src: terminal-subscription.yaml
+    dest: "{{ subsTerminalYaml }}"
+    mode: '0644'
+
+- name: deploy operators
+  ansible.builtin.shell:
+    cmd: oc apply -f "{{ item }}"
+  loop:
+    - "{{ subsPipelinesYaml }}"
+    - "{{ subsTerminalYaml }}"
